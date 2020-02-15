@@ -79,8 +79,8 @@ $(function () {
             ${checkIcon}
           </button>
         </div>
-        <div class="w-full px-4 py-4 text-2xl ${fontFolor} hover:underline font-light ${lineThrough}">${todo.name}</div>
-        <button name="removeItem" data-id="${todo.id}" class="absolute top-0 right-0 pt-1 pr-2 text-teal-400 shadow-inner">
+        <div name="editableItem" data-id="${todo.id}" class="w-full px-4 py-4 text-2xl ${fontFolor} hover:underline font-light ${lineThrough}">${todo.name}</div>
+        <button class="absolute top-0 right-0 pt-1 pr-2 text-teal-400 shadow-inner">
           <i class="fas fa-times-circle"></i>
         </button>
       </div>
