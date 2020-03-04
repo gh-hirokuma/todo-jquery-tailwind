@@ -83,7 +83,7 @@ $(function() {
           </button>
         </div>
         <div name="editableItem" data-id="${todo.id}" class="w-full px-4 py-4 text-2xl ${fontFolor} hover:underline font-light ${lineThrough}">${todo.name}</div>
-        <button class="absolute top-0 right-0 pt-1 pr-2 text-teal-400 shadow-inner">
+        <button name="removeItem" data-id="${todo.id}" class="absolute top-0 right-0 pt-1 pr-2 text-teal-400 shadow-inner">
           <i class="fas fa-times-circle"></i>
         </button>
       </div>
@@ -184,6 +184,7 @@ $(function() {
   });
 
   $(document).on("click", 'button[name="removeItem"]', function() {
+    console.log("hello");
     const removedTodoId = $(this).data("id");
     removeTodo(removedTodoId);
     loadInitialTodos();
