@@ -354,7 +354,8 @@ router
 ...
   .post((req, res, next) => {
     const newTodo = new Todo({
-      ...req.body
+      ...req.body,
+      done: false
     });
 
     newTodo.save(function(err) {
@@ -370,4 +371,150 @@ router
 
 ...
 
+```
+
+POST http://localhost:3000/api/v1/todos
+
+```json
+{
+  "statusCode": 200,
+  "statusMessage": "success",
+  "data": [
+    {
+      "_id": "5e60f78e1c1e7203481948e1"
+    }
+  ]
+}
+```
+
+```js
+
+...
+
+router
+  .route("/:todoId")
+  .all((req, res, next) => {
+    next();
+  })
+  .get((req, res, next) => {
+    const { todoId } = req.params;
+
+    Todo.find({ _id: todoId }, (err, result) => {
+      const data = result.length !== 0 ? result[0] : [];
+
+      res.json({
+        statusCode: 200,
+        statusMessage: "success",
+        data
+      });
+    });
+  })
+  .put((req, res, next) => {
+    next(new Error("not implemented"));
+  })
+  .post((req, res, next) => {})
+  .delete((req, res, next) => {
+    next(new Error("not implemented"));
+  });
+
+module.exports = router;
+
+```
+
+GET http://localhost:3000/api/v1/todos/5e5fa65460a1f80e0d70d071
+
+```json
+{
+  "statusCode": 200,
+  "statusMessage": "success",
+  "data": {
+    "_id": "5e5fa65460a1f80e0d70d071",
+    "title": "test",
+    "__v": 0
+  }
+}
+```
+
+```js
+router
+  .route("/:todoId")
+  .all((req, res, next) => {
+    next();
+  })
+...
+  .put((req, res, next) => {
+    const { todoId } = req.params;
+
+    Todo.update({ _id: todoId }, { ...req.body }, (err, result) => {
+      res.json({
+        statusCode: 200,
+        statusMessage: "success",
+        data: { ...result }
+      });
+    });
+  })
+  .post((req, res, next) => {})
+  .delete((req, res, next) => {
+    next(new Error("not implemented"));
+  });
+
+module.exports = router;
+```
+
+PUT http://localhost:3000/api/v1/todos/5e5fa65460a1f80e0d70d071
+
+request
+```json
+{
+  "title": "直したタスク"
+}
+```
+
+```json
+{
+  "statusCode": 200,
+  "statusMessage": "success",
+  "data": {
+    "n": 1,
+    "nModified": 1,
+    "ok": 1
+  }
+}
+```
+
+```js
+router
+  .route("/:todoId")
+  .all((req, res, next) => {
+    next();
+  })
+...
+  .delete((req, res, next) => {
+    const { todoId } = req.params;
+
+    Todo.remove({ _id: todoId }, (err, result) => {
+      res.json({
+        statusCode: 200,
+        statusMessage: "success",
+        data: { ...result }
+      });
+    });
+  });
+
+module.exports = router;
+
+```
+
+DELETE http://localhost:3000/api/v1/todos/5e5fa65460a1f80e0d70d071
+
+```json
+{
+  "statusCode": 200,
+  "statusMessage": "success",
+  "data": {
+    "n": 1,
+    "ok": 1,
+    "deletedCount": 1
+  }
+}
 ```

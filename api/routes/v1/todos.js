@@ -21,7 +21,8 @@ router
   })
   .post((req, res, next) => {
     const newTodo = new Todo({
-      ...req.body
+      ...req.body,
+      done: false
     });
 
     newTodo.save(function(err) {
@@ -44,14 +45,39 @@ router
     next();
   })
   .get((req, res, next) => {
-    res.json({ message: "GET :todoId" });
+    const { todoId } = req.params;
+
+    Todo.find({ _id: todoId }, (err, result) => {
+      const data = result.length !== 0 ? result[0] : [];
+      res.json({
+        statusCode: 200,
+        statusMessage: "success",
+        data
+      });
+    });
   })
   .put((req, res, next) => {
-    next(new Error("not implemented"));
+    const { todoId } = req.params;
+
+    Todo.update({ _id: todoId }, { ...req.body }, (err, result) => {
+      res.json({
+        statusCode: 200,
+        statusMessage: "success",
+        data: { ...result }
+      });
+    });
   })
   .post((req, res, next) => {})
   .delete((req, res, next) => {
-    next(new Error("not implemented"));
+    const { todoId } = req.params;
+
+    Todo.remove({ _id: todoId }, (err, result) => {
+      res.json({
+        statusCode: 200,
+        statusMessage: "success",
+        data: { ...result }
+      });
+    });
   });
 
 module.exports = router;
